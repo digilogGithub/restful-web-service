@@ -1,4 +1,4 @@
-package com.bistel.restfulwebservice;
+package com.bistel.restfulwebservice.helloworld;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
