@@ -5,3 +5,7 @@ logging:
   level:
     org.springframework: debug
 
+spring:
+  messages:
+    basename: localeMessages
+
