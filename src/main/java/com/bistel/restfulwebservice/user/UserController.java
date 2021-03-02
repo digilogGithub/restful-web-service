@@ -23,7 +23,11 @@ public class UserController {
     // GET /users/1 or /users/10 -> String -> (auto convert) -> int
     @GetMapping("/users/{id}")
     public User retrieveUser(@PathVariable int id) {
-        return userDaoService.findOne(id);
+        User user = userDaoService.findOne(id);
+        if (user == null) {
+            throw new UserNotFoundException(String.format("ID[%d] not found", id));
+        }
+        return user;
     }
 
     @PostMapping("/users")
