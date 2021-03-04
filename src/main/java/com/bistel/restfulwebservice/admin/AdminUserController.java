@@ -43,7 +43,8 @@ public class AdminUserController {
     // GET /admin/users/1 -> /admin/v1/users/1
 //    @GetMapping("/v1/users/{id}")
 //    @GetMapping(value = "/users/{id}", params = "version=1")
-    @GetMapping(value = "/users/{id}", headers = "X-API-VERSION=1")
+//    @GetMapping(value = "/users/{id}", headers = "X-API-VERSION=1")
+    @GetMapping(value = "/users/{id}", produces = "application/vnd.company.appV1+json")
     public MappingJacksonValue retrieveUserV1(@PathVariable int id) {
         User user = userDaoService.findOne(id);
         if (user == null) {
@@ -62,7 +63,8 @@ public class AdminUserController {
     //    @GetMapping("/v2/users/{id}")
 //    @GetMapping(value = "/users/{id}", params = "version=2")
 //    @GetMapping(value = "/users/{id}", params = "version=2")
-    @GetMapping(value = "/users/{id}", headers = "X-API-VERSION=2")
+//    @GetMapping(value = "/users/{id}", headers = "X-API-VERSION=2")
+    @GetMapping(value = "/users/{id}", produces = "application/vnd.company.appV2+json")
     public MappingJacksonValue retrieveUserV2(@PathVariable int id) {
         User user = userDaoService.findOne(id);
         if (user == null) {
