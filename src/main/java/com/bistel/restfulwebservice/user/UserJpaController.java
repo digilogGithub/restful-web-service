@@ -22,6 +22,9 @@ public class UserJpaController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PostRepository postRepository;
+
     // http://localhost:8088/jpa/users or http://localhost:8088/users
     @GetMapping("/users")
     public List<User> retrieveAllUsers() {
@@ -29,10 +32,11 @@ public class UserJpaController {
     }
 
     @GetMapping("/users/{id}")
-    public  EntityModel<User> retrieveUser(@PathVariable int id) {
+    public EntityModel<User> retrieveUser(@PathVariable int id) {
         Optional<User> user = userRepository.findById(id);
 
-        if (!user.isPresent()) {
+//        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             throw new UserNotFoundException(String.format("ID[%s] not found", id));
         }
 
@@ -65,10 +69,30 @@ public class UserJpaController {
     public List<Post> retrievePostsByUser(@PathVariable int id) {
         Optional<User> user = userRepository.findById(id);
 
-        if (!user.isPresent()) {
+//        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             throw new UserNotFoundException(String.format("ID[%s] not found", id));
         }
 
         return user.get().getPosts();
+    }
+
+    @PostMapping("/users/{id}/posts")
+    public ResponseEntity<User> createPost(@PathVariable int id, @RequestBody Post post) {
+        Optional<User> user = userRepository.findById(id);
+
+        if (user.isEmpty()) {
+            throw new UserNotFoundException(String.format("ID[%s] not found", id));
+        }
+
+        post.setUser(user.get());
+        Post savePost = postRepository.save(post);
+
+        URI uriLocation = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(savePost.getId())
+                .toUri();
+
+        return ResponseEntity.created(uriLocation).build();
     }
 }
